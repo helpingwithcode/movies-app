@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MoviesApp</string>
+    <string name="menu_title_query_popular">Sort movies by popularity</string>
+    <string name="menu_title_query_rated">Sorte movies by ratings</string>
+    <string name="dialog_error_message">We weren\'t able to retrieve data from The Movie Data Base. Please check your internet connection and try again later.</string>
+    <string name="dialog_error_title">Error while getting data</string>
+    <string name="dialog_try_again">Try again</string>
+    <string name="text_description">Movie description:</string>
+    <string name="vote_avarage">Vote avarage:</string>
+    <string name="release_date">Release date:</string>
+</resources>
