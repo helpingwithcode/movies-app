@@ -1,9 +1,16 @@
 package com.example.android.popularmovies.activities;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,24 +20,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.example.android.popularmovies.adapters.MovieAdapter;
-import com.example.android.popularmovies.dao.DAOMovie;
-import com.example.android.popularmovies.interfaces.IDAOMovie;
-import com.example.android.popularmovies.tasks.MovieDBQueryTask;
+import com.example.android.popularmovies.data.MovieContract;
+import com.example.android.popularmovies.utils.BroadcastUtils;
 import com.example.android.popularmovies.utils.ConstantsUtils;
-import com.example.android.popularmovies.utils.NetworkUtils;
 import com.example.android.popularmovies.R;
-import com.example.android.popularmovies.utils.RealmUtils;
 import com.example.android.popularmovies.utils.Utils;
+import com.example.android.popularmovies.utils.VolleyUtils;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClick {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private RecyclerView moviesRv;
-    private ProgressBar progressBar;
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClick, LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int MOVIE_LOADER_ID = 1;
+    @BindView(R.id.pb_loading)
+    ProgressBar progressBar;
+    @BindView(R.id.rv_movies)
+    RecyclerView moviesRv;
+    @BindView(R.id.rl_no_fav_holder)
+    RelativeLayout noFavHolderRl;
     private MovieAdapter movieAdapter;
-    private IDAOMovie idaoMovie;
     private String currentQuery;
+    private ContentResolver movieResolver;
 
     private final BroadcastReceiver mainActivityReceiver = new BroadcastReceiver() {
         @Override
@@ -38,14 +52,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             String broadcastAction = intent.getAction();
             switch (broadcastAction) {
                 case ConstantsUtils.INTENT_RERUN_TASK:
-                    startTask();
+                    getMoviesFromApi();
                     break;
                 case ConstantsUtils.INTENT_INIT_TASK:
                     showLoadingStatus(true);
                     break;
                 case ConstantsUtils.INTENT_END_TASK:
                     showLoadingStatus(false);
-                    movieAdapter.setDataBase(idaoMovie.getMovieList(currentQuery));
+                    setAdapterToRecyclerView();
                     break;
                 case ConstantsUtils.INTENT_ERROR_TASK:
                     showLoadingStatus(false);
@@ -55,36 +69,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     };
 
+    private void setAdapterToRecyclerView() {
+        getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        movieResolver = getApplicationContext().getContentResolver();
         checkSavedInstance(savedInstanceState);
-        RealmUtils.init(getApplicationContext());
-        idaoMovie = new DAOMovie();
-        setViews();
-        startTask();
+        getMoviesFromApi();
         setRecyclerView();
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
-        if(savedInstanceState == null)
-            currentQuery = ConstantsUtils.POPULAR_QUERY;
-        else
-            currentQuery = savedInstanceState.getString("currentQuery");
+        boolean hasSavedInstance = (savedInstanceState != null);
+        currentQuery = (hasSavedInstance) ? savedInstanceState.getString("currentQuery") : ConstantsUtils.POPULAR_QUERY;
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedState) {
-        savedState.putString("currentQuery", currentQuery);
-        log("saving currentQuery on onSavedInstaceState");
+        savedState.putString(getString(R.string.key_current_query), currentQuery);
         super.onSaveInstanceState(savedState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        setBroadcasts(false);
     }
 
     @Override
@@ -111,52 +119,54 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (itemId == R.id.item_query_popular) {
             if (!currentQuery.equals(ConstantsUtils.POPULAR_QUERY)) {
                 currentQuery = ConstantsUtils.POPULAR_QUERY;
-                startTask();
+                getMoviesFromApi();
             }
-        }
-        else if (itemId == R.id.item_query_rated) {
+        } else if (itemId == R.id.item_query_rated) {
             if (!currentQuery.equals(ConstantsUtils.TOP_RATED_QUERY)) {
                 currentQuery = ConstantsUtils.TOP_RATED_QUERY;
-                startTask();
+                getMoviesFromApi();
+            }
+        } else if (itemId == R.id.item_favorites) {
+            if (!currentQuery.equals(ConstantsUtils.FAVORITES_QUERY)) {
+                currentQuery = ConstantsUtils.FAVORITES_QUERY;
+                BroadcastUtils.sendBroadcast(getApplicationContext(), ConstantsUtils.INTENT_END_TASK);
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void getMoviesFromApi() {
+        movieResolver.delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+        BroadcastUtils.sendBroadcast(getApplicationContext(), ConstantsUtils.INTENT_INIT_TASK);
+        VolleyUtils.getMovies(getApplicationContext(), currentQuery);
+    }
+
     private void setBroadcasts(boolean broadcastStatus) {
-        log("setting setBroadcasts("+broadcastStatus+");");
         if (broadcastStatus) {
-            registerReceiver(mainActivityReceiver, new IntentFilter(ConstantsUtils.INTENT_INIT_TASK));
-            registerReceiver(mainActivityReceiver, new IntentFilter(ConstantsUtils.INTENT_END_TASK));
-            registerReceiver(mainActivityReceiver, new IntentFilter(ConstantsUtils.INTENT_ERROR_TASK));
-            registerReceiver(mainActivityReceiver, new IntentFilter(ConstantsUtils.INTENT_RERUN_TASK));
-        }
-        else {
+            registerReceiver(mainActivityReceiver, getIntentFilters());
+        } else {
             try {
                 unregisterReceiver(mainActivityReceiver);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log("Exception thrown when unregistering mainActivityReceiver!\nException: " + e.getLocalizedMessage());
             }
         }
     }
 
-    private void setViews() {
-        progressBar = (ProgressBar) findViewById(R.id.pb_loading);
-        moviesRv = (RecyclerView) findViewById(R.id.rv_movies);
-    }
-
-    private void startTask() {
-        MovieDBQueryTask task = new MovieDBQueryTask(getApplicationContext());
-        task.execute(NetworkUtils.returnMovieUrl(currentQuery));
+    private IntentFilter getIntentFilters() {
+        IntentFilter intentFilters = new IntentFilter();
+        intentFilters.addAction(ConstantsUtils.INTENT_INIT_TASK);
+        intentFilters.addAction(ConstantsUtils.INTENT_END_TASK);
+        intentFilters.addAction(ConstantsUtils.INTENT_ERROR_TASK);
+        intentFilters.addAction(ConstantsUtils.INTENT_RERUN_TASK);
+        return intentFilters;
     }
 
     private void setRecyclerView() {
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         movieAdapter = new MovieAdapter(this, getApplicationContext());
 
-        moviesRv.setLayoutManager(gridLayoutManager);//(layoutManager);
+        moviesRv.setLayoutManager(gridLayoutManager);
         moviesRv.setHasFixedSize(true);
         moviesRv.setAdapter(movieAdapter);
     }
@@ -164,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void thisClick(int movieId) {
         Intent movieDetailsIntent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
-        movieDetailsIntent.putExtra("movieId", movieId);
+        movieDetailsIntent.putExtra(getString(R.string.key_movie), movieId);
+        movieDetailsIntent.putExtra(getString(R.string.key_current_query), currentQuery);
         startActivity(movieDetailsIntent);
     }
 
@@ -175,5 +186,50 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void log(String s) {
         Log.e("MainAc", s);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(this) {
+
+            @Override
+            protected void onStartLoading() {
+                forceLoad();
+            }
+
+            @Override
+            public Cursor loadInBackground() {
+                try {
+                    Uri queryUri = MovieContract.MovieEntry.CONTENT_URI;
+                    String movieSortOrder = (currentQuery.equals(ConstantsUtils.POPULAR_QUERY)) ? MovieContract.MovieEntry.COLUMN_POPULARITY : MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE;
+                    movieSortOrder += " DESC";
+                    if (currentQuery.equals(ConstantsUtils.FAVORITES_QUERY)) {
+                        queryUri = MovieContract.MovieEntry.FAV_CONTENT_URI;
+                        movieSortOrder = null;
+                    }
+                    return movieResolver.query(queryUri, null, null, null, movieSortOrder);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult(Cursor data) {
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        boolean showHasNoFavView = (currentQuery == ConstantsUtils.FAVORITES_QUERY && data.getCount() == 0);
+        noFavHolderRl.setVisibility((showHasNoFavView) ? View.VISIBLE : View.GONE);
+        movieAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        movieAdapter.swapCursor(null);
     }
 }

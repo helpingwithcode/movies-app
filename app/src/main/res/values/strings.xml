@@ -1,11 +1,27 @@
 <resources>
     <string name="app_name">MoviesApp</string>
     <string name="menu_title_query_popular">Sort movies by popularity</string>
-    <string name="menu_title_query_rated">Sorte movies by ratings</string>
+    <string name="menu_title_query_rated">Sort movies by ratings</string>
     <string name="dialog_error_message">We weren\'t able to retrieve data from The Movie Data Base. Please check your internet connection and try again later.</string>
     <string name="dialog_error_title">Error while getting data</string>
     <string name="dialog_try_again">Try again</string>
     <string name="text_description">Movie description:</string>
-    <string name="vote_avarage">Vote avarage:</string>
-    <string name="release_date">Release date:</string>
+    <string name="vote_avarage">Vote avarage: %1$s</string>
+    <string name="release_date">Release date: %1$s</string>
+    <string name="menu_title_favorite">Mark as Favorite</string>
+    <string name="key_movie">movieId</string>
+    <string name="movie_detail_marked_favorite">You\'ve marked this movie as a favorite!</string>
+    <string name="movie_detail_unmarked_favorite">You\'ve unmarked this movie as a favorite!</string>
+    <string name="menu_title_favorites">Show favorites</string>
+    <string name="detail_activty">Movie Detail</string>
+    <string name="button_trailer">Watch trailer</string>
+    <string name="button_reviews">Read reviews</string>
+    <string name="review_activty">Reviews</string>
+    <string name="key_movie_id">movieId</string>
+    <string name="key_movie_title">movieTitle</string>
+    <string name="review_title">Reviews from the movie  \"%1$s\"</string>
+    <string name="review_author">Author: %1$s</string>
+    <string name="key_current_query">currentQuery</string>
+    <string name="no_fav_movies">You haven\'t picked any movie as a favorite yet!</string>
+    <string name="toast_message_connectivity">You need a valid internet connection for this functionality!</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.utils;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +43,17 @@ public class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        return url;
+    }
+
+    public static URL returnMovieRequestUrl(int movieId, String typeOfQuery) {
+        URL url = null;
+        try {
+            url = new URL(Uri.parse(ConstantsUtils.MOVIE_DB_BASE_URL+movieId+"/"+typeOfQuery+"?"+ConstantsUtils.API_KEY).buildUpon().build().toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Log.e("NetworkUtil", url.toString());
         return url;
     }
 }

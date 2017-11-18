@@ -17,4 +17,27 @@
         android:layout_height="64dp"
         android:layout_centerInParent="true"/>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/rl_no_fav_holder">
+
+        <ImageView
+            android:id="@+id/iv_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_favorite_border_black_48dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_fav"
+            android:layout_marginTop="20dp"
+            android:text="@string/no_fav_movies"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,49 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="MovieDetailPoster">
+        <item name="android:layout_width">185dp</item>
+        <item name="android:layout_height">250dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="MovieDetailInfo">
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginStart" tools:ignore="NewApi">15dp</item>
+    </style>
+
+    <style name="MovieDetailRatings" parent="MovieDetailInfo">
+        <item name="android:layout_marginTop">15dp</item>
+    </style>
+
+    <style name="MovieDetailReleaseDate" parent="MovieDetailInfo">
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
+    <style name="MovieDetailTitle">
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="MovieDetailDescription">
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif</item>
+        <item name="android:text">@string/text_description</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="MovieDetailPlot">
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>
