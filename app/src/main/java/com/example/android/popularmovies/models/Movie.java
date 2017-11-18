@@ -1,13 +1,10 @@
 package com.example.android.popularmovies.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by helpingwithcode on 12/11/17.
  */
 
-public class Movie implements Parcelable {
+public class Movie{
     private int movieId;
     private String title;
     private String poster;
@@ -24,24 +21,6 @@ public class Movie implements Parcelable {
         this.overview = overview;
         this.voteAverage = voteAverage;
         this.releaseDate = releaseDate;
-    }
-
-
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(movieId);
-        out.writeString(title);
-        out.writeString(poster);
-        out.writeString(overview);
-        out.writeString(voteAverage);
-        out.writeString(releaseDate);
-        out.writeString(movieReviews);
-        out.writeString(moviePreviews);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public int getMovieId() {
@@ -83,25 +62,4 @@ public class Movie implements Parcelable {
     public void setMoviePreviews(String previews) {
         moviePreviews = previews;
     }
-
-    private Movie(Parcel in) {
-        movieId = in.readInt();
-        title = in.readString();
-        poster = in.readString();
-        overview = in.readString();
-        voteAverage = in.readString();
-        releaseDate = in.readString();
-        movieReviews = in.readString();
-        moviePreviews = in.readString();
-    }
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
 }
