@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MovieDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String MOVIE_DATABASE_NAME = "movies.db";
+    private static final String MOVIE_DATABASE_NAME = "movies.db";
 
     private static final int VERSION = 3;
 

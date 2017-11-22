@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by helpingwithcode on 13/11/17.
  */
 
-public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdapterViewHolder> {
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.TrailerAdapterViewHolder> {
     final Context thisContext;
     private final ArrayList<UserMovieReview> reviewList;
 
@@ -28,31 +28,30 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     }
 
 
-    public class ReviewAdapterViewHolder extends RecyclerView.ViewHolder{
+    public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder{
         private final TextView contentTv;
         private final TextView authorTv;
 
-        public ReviewAdapterViewHolder(View view) {
+        public TrailerAdapterViewHolder(View view) {
             super(view);
             authorTv = view.findViewById(R.id.tv_author);
             contentTv = view.findViewById(R.id.tv_content);
         }
-
     }
 
     @Override
-    public ReviewAdapter.ReviewAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public TrailerAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         log("onCreateViewHolder(ViewGroup viewGroup, int viewType)");
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.item_review;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
-        return new ReviewAdapter.ReviewAdapterViewHolder(view);
+        return new TrailerAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ReviewAdapter.ReviewAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(TrailerAdapterViewHolder holder, int position) {
         UserMovieReview thisUserReview = reviewList.get(position);
         holder.authorTv.setText(String.format(thisContext.getString(R.string.review_author),thisUserReview.getUser()));
         holder.contentTv.setText(thisUserReview.getReview());

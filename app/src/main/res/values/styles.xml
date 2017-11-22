@@ -9,23 +9,21 @@
     </style>
 
     <style name="MovieDetailPoster">
-        <item name="android:layout_width">185dp</item>
-        <item name="android:layout_height">250dp</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/movie_poster_size</item>
     </style>
 
     <style name="MovieDetailInfo">
-        <item name="android:layout_marginLeft">15dp</item>
-        <item name="android:layout_marginStart" tools:ignore="NewApi">15dp</item>
+        <item name="android:layout_marginLeft">@dimen/spacing</item>
+        <item name="android:layout_marginStart" tools:ignore="NewApi">@dimen/spacing</item>
     </style>
 
     <style name="MovieDetailRatings" parent="MovieDetailInfo">
-        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginTop">@dimen/half_spacing</item>
     </style>
 
     <style name="MovieDetailReleaseDate" parent="MovieDetailInfo">
-        <item name="android:layout_marginBottom">15dp</item>
-        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginTop">@dimen/half_spacing</item>
     </style>
 
     <style name="MovieDetailTitle">
@@ -33,22 +31,66 @@
         <item name="android:textSize">24sp</item>
     </style>
 
+    <style name="MovieDetailPlot">
+        <item name="android:layout_marginBottom">@dimen/spacing</item>
+        <item name="android:layout_marginLeft">@dimen/onehalf_spacing</item>
+        <item name="android:layout_marginRight">@dimen/onehalf_spacing</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="RecyclerViewTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">@dimen/half_spacing</item>
+        <item name="android:paddingLeft">@dimen/half_spacing</item>
+        <item name="android:paddingRight">@dimen/half_spacing</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
+    </style>
+
+    <style name="ProgressBar">
+        <item name="android:layout_width">@dimen/progress_bar_size</item>
+        <item name="android:layout_height">@dimen/progress_bar_size</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="LinearLayoutTrailerReview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingLeft">@dimen/spacing</item>
+        <item name="android:paddingRight">@dimen/spacing</item>
+        <item name="android:paddingTop">@dimen/half_spacing</item>
+        <item name="android:paddingBottom">@dimen/half_spacing</item>
+    </style>
+
+    <style name="MovieDetailsHolder">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginTop">@dimen/half_spacing</item>
+        <item name="android:layout_marginBottom">@dimen/half_spacing</item>
+        <item name="android:layout_marginLeft">@dimen/spacing</item>
+        <item name="android:layout_marginRight">@dimen/spacing</item>
+    </style>
+
     <style name="MovieDetailDescription">
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_marginLeft">20dp</item>
-        <item name="android:layout_marginRight">20dp</item>
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">@dimen/half_spacing</item>
+        <item name="android:layout_marginLeft">@dimen/spacing</item>
+        <item name="android:layout_marginRight">@dimen/spacing</item>
+        <item name="android:layout_marginTop">@dimen/half_spacing</item>
         <item name="android:fontFamily" tools:ignore="NewApi">sans-serif</item>
         <item name="android:text">@string/text_description</item>
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="MovieDetailPlot">
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_marginLeft">20dp</item>
-        <item name="android:layout_marginRight">20dp</item>
-        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
-        <item name="android:textSize">16sp</item>
+    <style name="CardStyle">
+        <item name="android:layout_margin">@dimen/half_spacing</item>
     </style>
 
 </resources>

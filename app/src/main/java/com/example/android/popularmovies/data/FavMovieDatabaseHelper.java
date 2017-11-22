@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class FavMovieDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String FAV_MOVIE_DATABASE_NAME = "favmovies.db";
+    private static final String FAV_MOVIE_DATABASE_NAME = "favmovies.db";
 
     private static final int VERSION = 3;
 

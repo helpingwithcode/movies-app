@@ -6,7 +6,8 @@ package com.example.android.popularmovies.utils;
 
 public class ConstantsUtils {
     public static final String POSTER_SIZE_185 = "w185";
-    public static final String API_KEY = "api_key=INSERT_YOUR_API_KEY_HERE";
+    public static final String BACKDROP_SIZE = "w780";
+    public static final String API_KEY_PREF = "api_key=";
     public static final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/movie/";
     public static final String MOVIE_DB_IMAGE_URL = "https://image.tmdb.org/t/p/";
     public static final String TOP_RATED_QUERY = "top_rated";
@@ -21,4 +22,8 @@ public class ConstantsUtils {
     public static final String INTENT_FINISH_FETCH_REVIEW = "com.example.android.popularmovies.FINISH_FETCH_REVIEW";
     public static final String INTENT_REVIEW_PARSE_END = "com.example.android.popularmovies.PARSE_REVIEW_END";
     public static final String INTENT_REVIEW_PARSE_START = "com.example.android.popularmovies.PARSE_REVIEW_START";
+
+    public static final String INTENT_TRAILER_PARSE_START = "com.example.android.popularmovies.PARSE_TRAILER_START";
+    public static final String INTENT_TRAILER_PARSE_END = "com.example.android.popularmovies.PARSE_TRAILER_END";
+    public static final String INTENT_FINISH_FETCH_TRAILER = "com.example.android.popularmovies.FINISH_FETCH_TRAILER";
 }

@@ -1,41 +1,30 @@
 package com.example.android.popularmovies.activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.popularmovies.data.MovieContract;
 import com.example.android.popularmovies.R;
+import com.example.android.popularmovies.data.MovieContract;
 import com.example.android.popularmovies.models.Movie;
 import com.example.android.popularmovies.utils.ConstantsUtils;
 import com.example.android.popularmovies.utils.ObjectUtil;
 import com.example.android.popularmovies.utils.Utils;
-import com.example.android.popularmovies.utils.VolleyUtils;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.example.android.popularmovies.utils.ConstantsUtils.VIDEOS_QUERY;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.iv_poster)
@@ -48,10 +37,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView movieReleaseDateTv;
     @BindView(R.id.tv_ratings)
     TextView movieRatings;
-    @BindView(R.id.bt_watch_trailer)
-    Button watchTrailerBt;
-    @BindView(R.id.bt_reviews)
-    Button reviewsBt;
 
     private int thisMovieId;
     private boolean isFavorited;
@@ -59,43 +44,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private Toast mToast;
     private ContentResolver movieResolver;
     private static Context context;
-    private static Intent trailerIntent;
     private String movieTitle;
     private Movie thisMovie;
     private String currentQuery;
 
-    public static void createTrailerView(String serverResponse) {
-        JSONObject response = null;
-        try {
-            response = new JSONObject(serverResponse);
-            JSONArray result = response.getJSONArray("results");
-            JSONObject movie = (JSONObject) result.get(0);
-            trailerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + movie.getString("key")));
-            trailerIntent.putExtra("VIDEO_ID", movie.getString("key"));
-            trailerIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void launchTrailer(){
-        if(!Utils.isOnline(getApplicationContext())){
-            showConnectionToast();
-            return;
-        }
-        try {
-            context.startActivity(trailerIntent);
-        } catch (ActivityNotFoundException ex) {
-            log("youtube app not installed");
-        }
-
-    }
-
-    @OnClick({R.id.bt_watch_trailer,R.id.bt_reviews})
+    @OnClick({R.id.bt_trailers_reviews})
     public void viewClickListener(View iv) {
-        if (iv.getId() == R.id.bt_watch_trailer)
-            launchTrailer();
-        else if(iv.getId() == R.id.bt_reviews)
+        if (iv.getId() == R.id.bt_trailers_reviews)
             startReviewActivity();
     }
 
@@ -104,7 +59,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             showConnectionToast();
             return;
         }
-        Intent reviewIntent = new Intent(this, ReviewActivity.class);
+        Intent reviewIntent = new Intent(this, TrailerAndReviewActivity.class);
         reviewIntent.putExtra(getString(R.string.key_movie_id), thisMovieId);
         reviewIntent.putExtra(getString(R.string.key_movie_title), movieTitle);
         startActivity(reviewIntent);
@@ -129,8 +84,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedState) {
-        savedState.putInt(getString(R.string.key_movie), thisMovieId);
         super.onSaveInstanceState(savedState);
+        savedState.putInt(getString(R.string.key_movie), thisMovieId);
+        savedState.putString(getString(R.string.key_current_query), currentQuery);
     }
 
     @Override
@@ -175,6 +131,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
         boolean hasSavedInstanceState = (savedInstanceState != null);
         thisMovieId = (hasSavedInstanceState) ? savedInstanceState.getInt(getString(R.string.key_movie)) : getMovieIdFromIntent();
         currentQuery = (hasSavedInstanceState) ? savedInstanceState.getString(getString(R.string.key_current_query)) : getCurrentQueryFromIntent();
+        try {
+            populateLayoutWithMovieInfo(thisMovieId);
+        }
+        catch (Exception e){
+            log("can't populate layout with movie info from here");
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        boolean hasSavedInstance = savedInstanceState != null;
+        thisMovieId = (hasSavedInstance) ? savedInstanceState.getInt(getString(R.string.key_movie)) : getMovieIdFromIntent();
+        currentQuery = savedInstanceState.getString(getString(R.string.key_current_query));
         populateLayoutWithMovieInfo(thisMovieId);
     }
 
@@ -200,13 +170,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movieReleaseDateTv.setText(String.format(getString(R.string.release_date), thisMovie.getReleaseDate()));
         movieRatings.setText(String.format(getString(R.string.vote_avarage), thisMovie.getVoteAverage()));
         Picasso.with(getApplicationContext())
-                .load(Utils.getImagePath(thisMovie.getPoster()))
+                .load(Utils.getImagePath(thisMovie.getBackdropPath(),ConstantsUtils.BACKDROP_SIZE))
                 .fit()
                 .into(moviePosterIv);
 
         movieCursor.close();
-
-        VolleyUtils.getMovieRequest(getApplicationContext(), thisMovieId, VIDEOS_QUERY);
     }
 
     private void getFavoriteStatus(int movieId) {

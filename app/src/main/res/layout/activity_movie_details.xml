@@ -22,30 +22,31 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_margin="10dp"
-                android:layout_toRightOf="@id/iv_poster"
-                android:layout_toEndOf="@id/iv_poster">
+                style="@style/MovieDetailsHolder"
+                android:layout_below="@id/iv_poster">
 
                 <TextView
                     android:id="@+id/tv_title"
                     style="@style/MovieDetailTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:text="@string/movie_title_default"/>
 
                 <TextView
                     android:id="@+id/tv_ratings"
                     style="@style/MovieDetailRatings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_title" />
+                    android:layout_below="@id/tv_title"
+                    tools:text="@string/movie_ratings_default"/>
 
                 <TextView
                     android:id="@+id/tv_release_date"
                     style="@style/MovieDetailReleaseDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_ratings" />
+                    android:layout_below="@id/tv_ratings"
+                    tools:text="@string/movie_release_default"/>
             </RelativeLayout>
 
         </RelativeLayout>
@@ -71,31 +72,14 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/rl_trailer_holder"
+        <Button
+            android:id="@+id/bt_trailers_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:layout_margin="20dp"
-            android:layout_below="@id/rl_movie_description">
-
-            <Button
-                android:id="@+id/bt_watch_trailer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="?buttonBarButtonStyle"
-                android:text="@string/button_trailer" />
-
-            <Button
-                android:id="@+id/bt_reviews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="?buttonBarButtonStyle"
-                android:text="@string/button_reviews" />
-
-        </LinearLayout>
+            style="?buttonBarButtonStyle"
+            android:layout_margin="@dimen/half_spacing"
+            android:layout_below="@id/rl_movie_description"
+            android:text="@string/button_trailers_reviews"/>
 
     </RelativeLayout>
 

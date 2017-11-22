@@ -14,16 +14,16 @@ import android.util.Log;
 
 public class MovieProvider extends ContentProvider {
 
-    public static final int MOVIE = 100;
-    public static final int MOVIE_ID = 101;
-    public static final int FAV_MOVIE = 102;
-    public static final int FAV_MOVIE_ID = 103;
+    private static final int MOVIE = 100;
+    private static final int MOVIE_ID = 101;
+    private static final int FAV_MOVIE = 102;
+    private static final int FAV_MOVIE_ID = 103;
 
     private static final UriMatcher thisUriMatcher = buildUriMatcher();
     private MovieDatabaseHelper movieDatabaseHelper;
     private FavMovieDatabaseHelper favMovieDatabaseHelper;
 
-    public static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
 
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -50,7 +50,7 @@ public class MovieProvider extends ContentProvider {
         Uri uriToReturn;
         switch (match) {
             case MOVIE: {
-                long _id = movieDatabaseHelper.getWritableDatabase().insert(MovieContract.MovieEntry.MOVIE_TABLE, null, values);
+                long _id = getMovieDb().insert(MovieContract.MovieEntry.MOVIE_TABLE, null, values);
                 if ( _id > 0 )
                     uriToReturn = MovieContract.MovieEntry.buildMovieUri(_id, MovieContract.PATH_MOVIES);
                 else
@@ -58,7 +58,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             }
             case FAV_MOVIE: {
-                long _id = favMovieDatabaseHelper.getWritableDatabase().insert(MovieContract.MovieEntry.FAV_MOVIE_TABLE, null, values);
+                long _id = getFavoriteDb().insert(MovieContract.MovieEntry.FAV_MOVIE_TABLE, null, values);
                 Log.e("MovieProvider", "_id: "+_id);
                 if (_id > 0)
                     uriToReturn = MovieContract.MovieEntry.buildMovieUri(_id, MovieContract.PATH_FAV_MOVIES);
@@ -132,23 +132,23 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         Log.e("MovieProvider", "delete("+uri+")");
-        final SQLiteDatabase db;// = movieDatabaseHelper.getWritableDatabase();
+        final SQLiteDatabase db;// = getMovieDb();
         int deletedRows;
 
         switch (thisUriMatcher.match(uri)) {
             case MOVIE:
                 Log.e("MovieProvider", "delete case MOVIE");
-                db = movieDatabaseHelper.getWritableDatabase();
+                db = getMovieDb();
                 deletedRows = db.delete(MovieContract.MovieEntry.MOVIE_TABLE, selection, selectionArgs);
                 break;
             case FAV_MOVIE:
                 Log.e("MovieProvider", "delete case FAV_MOVIE");
-                db = favMovieDatabaseHelper.getWritableDatabase();
+                db = getFavoriteDb();
                 deletedRows = db.delete(MovieContract.MovieEntry.FAV_MOVIE_TABLE, selection, selectionArgs);
                 break;
             case FAV_MOVIE_ID:
                 Log.e("MovieProvider", "delete case FAV_MOVIE_ID");
-                db = favMovieDatabaseHelper.getWritableDatabase();
+                db = getFavoriteDb();
                 deletedRows = db.delete(MovieContract.MovieEntry.FAV_MOVIE_TABLE, MovieContract.MovieEntry.COLUMN_MOVIE_ID +" = "+uri.getLastPathSegment(), selectionArgs);
                 break;
             default:
@@ -163,7 +163,7 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = movieDatabaseHelper.getWritableDatabase();
+        final SQLiteDatabase db = getMovieDb();
         final int match = thisUriMatcher.match(uri);
         int updatedRows = 0;
 
@@ -178,6 +178,14 @@ public class MovieProvider extends ContentProvider {
         if (updatedRows != 0)
             getContext().getContentResolver().notifyChange(uri, null);
         return updatedRows;
+    }
+
+    private SQLiteDatabase getMovieDb() {
+        return movieDatabaseHelper.getWritableDatabase();
+    }
+
+    private SQLiteDatabase getFavoriteDb() {
+        return favMovieDatabaseHelper.getWritableDatabase();
     }
 
 

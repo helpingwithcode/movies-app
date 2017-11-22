@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.example.android.popularmovies.R;
 
@@ -17,6 +18,11 @@ import java.lang.reflect.Method;
 public class Utils {
     public static String getImagePath(String imagePath) {
         return ConstantsUtils.MOVIE_DB_IMAGE_URL+ConstantsUtils.POSTER_SIZE_185+"/"+imagePath;
+    }
+
+    public static String getImagePath(String imagePath, String size) {
+        Log.e("Utils",ConstantsUtils.MOVIE_DB_IMAGE_URL+size+"/"+imagePath);
+        return ConstantsUtils.MOVIE_DB_IMAGE_URL+size+"/"+imagePath;
     }
 
     public static void showErrorDialog(final Context context) {

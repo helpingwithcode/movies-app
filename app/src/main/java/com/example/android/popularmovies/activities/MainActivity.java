@@ -7,14 +7,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,13 +23,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.adapters.MovieAdapter;
 import com.example.android.popularmovies.data.MovieContract;
 import com.example.android.popularmovies.utils.BroadcastUtils;
 import com.example.android.popularmovies.utils.ConstantsUtils;
-import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.utils.Utils;
 import com.example.android.popularmovies.utils.VolleyUtils;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +46,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @BindView(R.id.rl_no_fav_holder)
     RelativeLayout noFavHolderRl;
     private MovieAdapter movieAdapter;
-    private String currentQuery;
+    private String currentQuery = ConstantsUtils.POPULAR_QUERY;
     private ContentResolver movieResolver;
+    private Parcelable recyclerViewState;
 
     private final BroadcastReceiver mainActivityReceiver = new BroadcastReceiver() {
         @Override
@@ -85,14 +89,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void checkSavedInstance(Bundle savedInstanceState) {
-        boolean hasSavedInstance = (savedInstanceState != null);
-        currentQuery = (hasSavedInstance) ? savedInstanceState.getString("currentQuery") : ConstantsUtils.POPULAR_QUERY;
+        currentQuery = (savedInstanceState != null) ? savedInstanceState.getString(getString(R.string.key_current_query)) : ConstantsUtils.POPULAR_QUERY;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        boolean hasSavedInstance = savedInstanceState != null;
+        currentQuery = (hasSavedInstance) ? savedInstanceState.getString(getString(R.string.key_current_query)) : ConstantsUtils.POPULAR_QUERY;
+        recyclerViewState = (hasSavedInstance) ? savedInstanceState.getParcelable(getString(R.string.key_scroll_position)) : null;
+        moviesRv.getLayoutManager().onRestoreInstanceState(recyclerViewState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedState) {
-        savedState.putString(getString(R.string.key_current_query), currentQuery);
         super.onSaveInstanceState(savedState);
+        savedState.putString(getString(R.string.key_current_query), currentQuery);
+        savedState.putParcelable(getString(R.string.key_scroll_position), moviesRv.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -163,13 +176,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void setRecyclerView() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), numberOfColumns());
         movieAdapter = new MovieAdapter(this, getApplicationContext());
 
         moviesRv.setLayoutManager(gridLayoutManager);
         moviesRv.setHasFixedSize(true);
         moviesRv.setAdapter(movieAdapter);
     }
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
+    }
+
 
     @Override
     public void thisClick(int movieId) {
@@ -182,10 +206,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void showLoadingStatus(boolean b) {
         progressBar.setVisibility((!b) ? View.INVISIBLE : View.VISIBLE);
         moviesRv.setVisibility((b) ? View.INVISIBLE : View.VISIBLE);
-    }
-
-    private void log(String s) {
-        Log.e("MainAc", s);
     }
 
     @Override
@@ -223,13 +243,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        boolean showHasNoFavView = (currentQuery == ConstantsUtils.FAVORITES_QUERY && data.getCount() == 0);
+        boolean showHasNoFavView = currentQuery.equals(ConstantsUtils.FAVORITES_QUERY) && data.getCount() == 0;
         noFavHolderRl.setVisibility((showHasNoFavView) ? View.VISIBLE : View.GONE);
         movieAdapter.swapCursor(data);
+        if(recyclerViewState!=null)
+            moviesRv.getLayoutManager().onRestoreInstanceState(recyclerViewState);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         movieAdapter.swapCursor(null);
+    }
+
+    private void log(String s) {
+        Log.e("MainAc", s);
     }
 }

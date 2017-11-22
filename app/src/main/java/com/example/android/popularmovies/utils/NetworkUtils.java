@@ -16,40 +16,20 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-
-    public static String getResponseFromHttpUrl(URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try {
-            InputStream in = urlConnection.getInputStream();
-
-            Scanner scanner = new Scanner(in);
-            scanner.useDelimiter("\\A");
-
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                return null;
-            }
-        } finally {
-            urlConnection.disconnect();
-        }
-    }
-
-    public static URL returnMovieUrl(String typeOfQuery) {
+    public static URL returnMovieUrl(String typeOfQuery, String apiKey) {
         URL url = null;
         try {
-            url = new URL(Uri.parse(ConstantsUtils.MOVIE_DB_BASE_URL+typeOfQuery+"?"+ConstantsUtils.API_KEY).buildUpon().build().toString());
+            url = new URL(Uri.parse(ConstantsUtils.MOVIE_DB_BASE_URL+typeOfQuery+"?"+ ConstantsUtils.API_KEY_PREF +apiKey).buildUpon().build().toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return url;
     }
 
-    public static URL returnMovieRequestUrl(int movieId, String typeOfQuery) {
+    public static URL returnMovieRequestUrl(int movieId, String typeOfQuery, String apiKey) {
         URL url = null;
         try {
-            url = new URL(Uri.parse(ConstantsUtils.MOVIE_DB_BASE_URL+movieId+"/"+typeOfQuery+"?"+ConstantsUtils.API_KEY).buildUpon().build().toString());
+            url = new URL(Uri.parse(ConstantsUtils.MOVIE_DB_BASE_URL+movieId+"/"+typeOfQuery+"?"+ ConstantsUtils.API_KEY_PREF +apiKey).buildUpon().build().toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

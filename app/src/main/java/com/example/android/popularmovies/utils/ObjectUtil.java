@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.example.android.popularmovies.data.MovieContract;
 import com.example.android.popularmovies.models.Movie;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +77,7 @@ public class ObjectUtil {
                 ContentValues contentValues = new ContentValues();
 
                 contentValues.put(COLUMN_MOVIE_ID, movie.getMovieId());
-                contentValues.put(COLUMN_VOTE_AVERAGE, movie.getVoteAverage().toString());
+                contentValues.put(COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
                 contentValues.put(COLUMN_TITLE, movie.getTitle());
                 contentValues.put(COLUMN_POSTER_PATH, movie.getPoster());
                 contentValues.put(COLUMN_OVERVIEW, movie.getOverview());
@@ -87,24 +86,22 @@ public class ObjectUtil {
                 contentValues.put(COLUMN_POPULARITY, "");
                 contentValues.put(COLUMN_ORIGINAL_LANGUAGE, "");
                 contentValues.put(COLUMN_ORIGINAL_TITLE, "");
-                contentValues.put(COLUMN_BACKDROP_PATH, "");
-                log("Copying movie: "+contentValues.toString());
+                contentValues.put(COLUMN_BACKDROP_PATH, movie.getBackdropPath());
                 movieContentResolver.insert(MovieContract.MovieEntry.FAV_CONTENT_URI, contentValues);
                 return null;
             }
         }.execute();
     }
 
-    public static Movie createMovieFromCursor(Cursor movieCursor, int movieId) {
-        log("createMovieFromCursor()");
-        int overview = movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW);
-        int originalTitle = movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE);
-        int releaseDate = movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
-        int voteAverage = movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE);
-        int posterPath = movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH);
-        int voteCount = movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT);
+    public static Movie createMovieFromCursor(Cursor mc, int movieId) {
+        int overview = mc.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW);
+        int originalTitle = mc.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE);
+        int releaseDate = mc.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
+        int voteAverage = mc.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE);
+        int posterPath = mc.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH);
+        int backdropPath = mc.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH);
 
-        return new Movie(movieId,movieCursor.getString(originalTitle),movieCursor.getString(posterPath),movieCursor.getString(overview),movieCursor.getString(voteAverage),movieCursor.getString(releaseDate));
+        return new Movie(movieId,mc.getString(originalTitle),mc.getString(posterPath), mc.getString(backdropPath),mc.getString(overview),mc.getString(voteAverage),mc.getString(releaseDate));
     }
 
     private static void log(String s) {

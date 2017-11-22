@@ -13,15 +13,23 @@
     <string name="movie_detail_marked_favorite">You\'ve marked this movie as a favorite!</string>
     <string name="movie_detail_unmarked_favorite">You\'ve unmarked this movie as a favorite!</string>
     <string name="menu_title_favorites">Show favorites</string>
-    <string name="detail_activty">Movie Detail</string>
-    <string name="button_trailer">Watch trailer</string>
-    <string name="button_reviews">Read reviews</string>
+    <string name="detail_activty">Movie Details</string>
     <string name="review_activty">Reviews</string>
     <string name="key_movie_id">movieId</string>
     <string name="key_movie_title">movieTitle</string>
-    <string name="review_title">Reviews from the movie  \"%1$s\"</string>
     <string name="review_author">Author: %1$s</string>
     <string name="key_current_query">currentQuery</string>
     <string name="no_fav_movies">You haven\'t picked any movie as a favorite yet!</string>
     <string name="toast_message_connectivity">You need a valid internet connection for this functionality!</string>
+    <string name="movie_title_default">Movie title</string>
+    <string name="movie_ratings_default">Ratings</string>
+    <string name="movie_release_default">Release</string>
+    <string name="button_trailers_reviews">Check out the trailers and reviews here!</string>
+    <string name="trailer_text">Trailer #%1$s  (%2$s)</string>
+    <string name="key_scroll_position">recyclerViewScrollPosition</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
+    <string name="no_reviews">No reviews found</string>
+    <string name="no_trailers">No trailers found</string>
+    <string name="toast_message_app_not_installed">youtube app not installed</string>
 </resources>
