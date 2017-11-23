@@ -8,11 +8,13 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.example.android.popularmovies.utils.ConstantsUtils.REVIEWS_QUERY;
@@ -42,7 +45,9 @@ import static com.example.android.popularmovies.utils.ConstantsUtils.VIDEOS_QUER
 
 public class TrailerAndReviewActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerClick {
 
-    private static final int MAX_TRAILERS = 3;
+    private static final String SHOWING_REVIEWS = "showingReviews";
+    private static final String SHOWING_TRAILERS = "showingTrailers";
+    private String CURRENT_SHOWING;
     private static ArrayList<UserMovieReview> reviewList;
     private static ArrayList<MovieTrailer> trailerList;
     private int movieId;
@@ -63,6 +68,14 @@ public class TrailerAndReviewActivity extends AppCompatActivity implements Trail
     TextView noReviewsTv;
     @BindView(R.id.tv_no_trailers)
     TextView noTrailersTv;
+    @BindView(R.id.bt_show_reviews)
+    Button showReviewsBt;
+    @BindView(R.id.bt_show_trailers)
+    Button showTrailersBt;
+    @BindView(R.id.cv_reviews)
+    CardView reviewsCv;
+    @BindView(R.id.cv_trailers)
+    CardView trailersCv;
     private Toast mToast;
 
     @Override
@@ -74,6 +87,7 @@ public class TrailerAndReviewActivity extends AppCompatActivity implements Trail
         getExtrasFromIntent();
         fetchTrailerAndReview();
         setViews();
+        showTrailers();
     }
 
     @Override
@@ -97,6 +111,43 @@ public class TrailerAndReviewActivity extends AppCompatActivity implements Trail
     protected void onPause() {
         super.onPause();
         unregisterReceiver(reviewsBroadcastReceiver);
+    }
+
+    @OnClick({R.id.bt_show_trailers, R.id.bt_show_reviews})
+    public void onBtClicked(View v){
+        switch (v.getId()){
+            case R.id.bt_show_reviews:
+                showReviews();
+                break;
+            case R.id.bt_show_trailers:
+                showTrailers();
+                break;
+        }
+    }
+
+    private void showTrailers() {
+        CURRENT_SHOWING = SHOWING_TRAILERS;
+        changeButtons();
+        changeRecyclerViewVisibility();
+    }
+
+    private void showReviews() {
+        CURRENT_SHOWING = SHOWING_REVIEWS;
+        changeButtons();
+        changeRecyclerViewVisibility();
+    }
+
+    private void changeRecyclerViewVisibility() {
+        boolean isShowingTrailers = CURRENT_SHOWING.equals(SHOWING_TRAILERS);
+        reviewsCv.setVisibility((isShowingTrailers)?View.GONE:View.VISIBLE);
+        trailersCv.setVisibility((isShowingTrailers)?View.VISIBLE:View.GONE);
+    }
+
+    private void changeButtons() {
+        Context ctx = getApplicationContext();
+        boolean isShowingTrailers = CURRENT_SHOWING.equals(SHOWING_TRAILERS);
+        showReviewsBt.setTextColor(ContextCompat.getColor(ctx,(isShowingTrailers)? R.color.grey:R.color.white));
+        showTrailersBt.setTextColor(ContextCompat.getColor(ctx,(isShowingTrailers)? R.color.white:R.color.grey));
     }
 
     private final BroadcastReceiver reviewsBroadcastReceiver = new BroadcastReceiver() {
@@ -214,7 +265,7 @@ public class TrailerAndReviewActivity extends AppCompatActivity implements Trail
                 try {
                     JSONObject response = new JSONObject(r);
                     JSONArray result = response.getJSONArray("results");
-                    for (int i = 0; i < MAX_TRAILERS; i++) {
+                    for (int i = 0; i < result.length(); i++) {
                         JSONObject review = (JSONObject) result.get(i);
                         String trailerId = review.getString("id");
                         String trailerName = review.getString("name");
