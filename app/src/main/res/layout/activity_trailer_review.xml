@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/ll_buttons_holder">
+        android:layout_above="@+id/ll_buttons_holder">
 
         <android.support.v7.widget.CardView
             android:id="@+id/cv_trailers"

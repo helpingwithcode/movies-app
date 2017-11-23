@@ -7,4 +7,6 @@
     <dimen name="movie_poster_size">225dp</dimen>
     <dimen name="item_poster_height">333dp</dimen>
     <dimen name="item_poster_width">218dp</dimen>
+    <dimen name="movie_poster_height">250dp</dimen>
+    <dimen name="movie_poster_width">185dp</dimen>
 </resources>

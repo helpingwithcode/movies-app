@@ -23,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/MovieDetailsHolder"
-                android:layout_below="@id/iv_poster">
+                android:layout_toRightOf="@id/iv_poster"
+                android:layout_toEndOf="@id/iv_poster">
 
                 <TextView
                     android:id="@+id/tv_title"

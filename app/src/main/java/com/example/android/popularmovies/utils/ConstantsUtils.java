@@ -6,6 +6,7 @@ package com.example.android.popularmovies.utils;
 
 public class ConstantsUtils {
     public static final String POSTER_SIZE_185 = "w185";
+    public static final String POSTER_SIZE_342 = "w342";
     public static final String BACKDROP_SIZE = "w780";
     public static final String API_KEY_PREF = "api_key=";
     public static final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/movie/";

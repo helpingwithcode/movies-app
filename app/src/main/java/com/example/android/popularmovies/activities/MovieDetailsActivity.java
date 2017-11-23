@@ -170,7 +170,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movieReleaseDateTv.setText(String.format(getString(R.string.release_date), thisMovie.getReleaseDate()));
         movieRatings.setText(String.format(getString(R.string.vote_avarage), thisMovie.getVoteAverage()));
         Picasso.with(getApplicationContext())
-                .load(Utils.getImagePath(thisMovie.getBackdropPath(),ConstantsUtils.BACKDROP_SIZE))
+                .load(Utils.getImagePath(thisMovie.getBackdropPath(),ConstantsUtils.POSTER_SIZE_342))
                 .fit()
                 .into(moviePosterIv);
 

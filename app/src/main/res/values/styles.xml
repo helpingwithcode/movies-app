@@ -9,8 +9,9 @@
     </style>
 
     <style name="MovieDetailPoster">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/movie_poster_size</item>
+        <item name="android:layout_width">@dimen/movie_poster_width</item>
+        <item name="android:layout_height">@dimen/movie_poster_height</item>
+        <item name="android:padding">@dimen/half_spacing</item>
     </style>
 
     <style name="MovieDetailInfo">
@@ -73,10 +74,10 @@
 
     <style name="MovieDetailsHolder">
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginTop">@dimen/half_spacing</item>
-        <item name="android:layout_marginBottom">@dimen/half_spacing</item>
-        <item name="android:layout_marginLeft">@dimen/spacing</item>
-        <item name="android:layout_marginRight">@dimen/spacing</item>
+        <item name="android:layout_marginTop">@dimen/spacing</item>
+        <item name="android:layout_marginBottom">@dimen/spacing</item>
+        <item name="android:layout_marginLeft">@dimen/half_spacing</item>
+        <item name="android:layout_marginRight">@dimen/half_spacing</item>
     </style>
 
     <style name="MovieDetailDescription">

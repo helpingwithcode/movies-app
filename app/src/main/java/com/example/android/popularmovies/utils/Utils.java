@@ -46,21 +46,16 @@ public class Utils {
         alert.show();
     }
 
-    public static boolean isOnline(Context thisContext){
-        boolean mobileDataEnabled = false;
-        boolean wifiEnabled = false;
-        ConnectivityManager dataManager = (ConnectivityManager) thisContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifiStatus = dataManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        try {
-            Class cmClass = Class.forName(dataManager.getClass().getName());
-            Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
-            method.setAccessible(true);
-            mobileDataEnabled = dataManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-            wifiEnabled = wifiStatus.isConnectedOrConnecting();
+    public static boolean isOnline(Context context){
+        boolean isOnline = false;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            int connection = activeNetwork.getType();
+            isOnline = (connection == ConnectivityManager.TYPE_WIFI || connection == ConnectivityManager.TYPE_MOBILE);
         }
-        catch(Exception e){
-
-        }
-        return (mobileDataEnabled || wifiEnabled);
+        else
+            isOnline = false;
+        return isOnline;
     }
 }
