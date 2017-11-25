@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/sv_holder"
     tools:context="com.example.android.popularmovies.activities.MovieDetailsActivity">
 
     <RelativeLayout
@@ -12,7 +14,7 @@
         <RelativeLayout
             android:id="@+id/rl_movie_details"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_poster"
@@ -20,18 +22,18 @@
                 tools:ignore="ContentDescription" />
 
             <RelativeLayout
+                style="@style/MovieDetailsHolder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                style="@style/MovieDetailsHolder"
-                android:layout_toRightOf="@id/iv_poster"
-                android:layout_toEndOf="@id/iv_poster">
+                android:layout_toEndOf="@id/iv_poster"
+                android:layout_toRightOf="@id/iv_poster">
 
                 <TextView
                     android:id="@+id/tv_title"
                     style="@style/MovieDetailTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="@string/movie_title_default"/>
+                    tools:text="@string/movie_title_default" />
 
                 <TextView
                     android:id="@+id/tv_ratings"
@@ -39,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_title"
-                    tools:text="@string/movie_ratings_default"/>
+                    tools:text="@string/movie_ratings_default" />
 
                 <TextView
                     android:id="@+id/tv_release_date"
@@ -47,40 +49,55 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_ratings"
-                    tools:text="@string/movie_release_default"/>
+                    tools:text="@string/movie_release_default" />
             </RelativeLayout>
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/rl_movie_description"
+            style="@style/CardStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rl_movie_details">
+            android:layout_below="@id/rl_movie_details"
+            card_view:cardCornerRadius="4dp">
 
-            <TextView
-                android:id="@+id/tv_description"
-                style="@style/MovieDetailDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/half_spacing"
+                android:layout_marginBottom="@dimen/half_spacing"
+                android:layout_marginLeft="@dimen/spacing"
+                android:layout_marginRight="@dimen/spacing"
+                android:layout_below="@id/rl_movie_details">
 
-            <TextView
-                android:id="@+id/tv_plot"
-                style="@style/MovieDetailPlot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_description" />
+                <TextView
+                    android:id="@+id/tv_description"
+                    style="@style/RecyclerViewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_description" />
 
-        </RelativeLayout>
+                <View style="@style/Divider"
+                    android:id="@+id/divider"
+                    android:layout_below="@id/tv_description"/>
 
-        <Button
-            android:id="@+id/bt_trailers_reviews"
+                <TextView
+                    android:id="@+id/tv_plot"
+                    style="@style/MovieDetailPlot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <include
+            layout="@layout/layout_trailer_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?buttonBarButtonStyle"
-            android:layout_margin="@dimen/half_spacing"
-            android:layout_below="@id/rl_movie_description"
-            android:text="@string/button_trailers_reviews"/>
+            android:layout_below="@id/rl_movie_description" />
 
     </RelativeLayout>
 

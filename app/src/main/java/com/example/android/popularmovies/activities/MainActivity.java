@@ -31,8 +31,6 @@ import com.example.android.popularmovies.utils.ConstantsUtils;
 import com.example.android.popularmovies.utils.Utils;
 import com.example.android.popularmovies.utils.VolleyUtils;
 
-import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

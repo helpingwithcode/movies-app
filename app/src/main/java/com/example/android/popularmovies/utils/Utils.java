@@ -9,8 +9,6 @@ import android.util.Log;
 
 import com.example.android.popularmovies.R;
 
-import java.lang.reflect.Method;
-
 /**
  * Created by helpingwithcode on 30/09/17.
  */
@@ -21,7 +19,6 @@ public class Utils {
     }
 
     public static String getImagePath(String imagePath, String size) {
-        Log.e("Utils",ConstantsUtils.MOVIE_DB_IMAGE_URL+size+"/"+imagePath);
         return ConstantsUtils.MOVIE_DB_IMAGE_URL+size+"/"+imagePath;
     }
 
@@ -47,15 +44,12 @@ public class Utils {
     }
 
     public static boolean isOnline(Context context){
-        boolean isOnline = false;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
             int connection = activeNetwork.getType();
-            isOnline = (connection == ConnectivityManager.TYPE_WIFI || connection == ConnectivityManager.TYPE_MOBILE);
+            return (connection == ConnectivityManager.TYPE_WIFI || connection == ConnectivityManager.TYPE_MOBILE);
         }
-        else
-            isOnline = false;
-        return isOnline;
+        return false;
     }
 }

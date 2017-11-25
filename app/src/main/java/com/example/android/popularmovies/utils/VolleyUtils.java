@@ -9,7 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.popularmovies.R;
-import com.example.android.popularmovies.activities.TrailerAndReviewActivity;
+import com.example.android.popularmovies.activities.MovieDetailsActivity;
 
 /**
  * Created by helpingwithcode on 11/11/17.
@@ -40,16 +40,20 @@ public class VolleyUtils {
         final StringRequest toSend = new StringRequest(Request.Method.GET, urlPath, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(query.equals(ConstantsUtils.VIDEOS_QUERY)) {
-                    TrailerAndReviewActivity.populateTrailerView(response);
-                }
+                if(query.equals(ConstantsUtils.VIDEOS_QUERY))
+                    MovieDetailsActivity.populateTrailerView(response);
                 else if(query.equals(ConstantsUtils.REVIEWS_QUERY))
-                    TrailerAndReviewActivity.populateReviewView(response);
+                    MovieDetailsActivity.populateReviewView(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                BroadcastUtils.sendBroadcast(context, ConstantsUtils.INTENT_ERROR_TASK);
+                String intentName = "";
+                if(query.equals(ConstantsUtils.VIDEOS_QUERY))
+                    intentName = ConstantsUtils.INTENT_ERROR_VIDEO_TASK;
+                else if(query.equals(ConstantsUtils.REVIEWS_QUERY))
+                    intentName = ConstantsUtils.INTENT_ERROR_REVIEW_TASK;
+                BroadcastUtils.sendBroadcast(context, intentName);
             }
         });
 

@@ -3,12 +3,8 @@ package com.example.android.popularmovies.utils;
 import android.net.Uri;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Scanner;
 
 /**
  * Created by helpingwithcode on 27/09/17.

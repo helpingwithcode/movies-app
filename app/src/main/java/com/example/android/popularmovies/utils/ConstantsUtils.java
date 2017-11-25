@@ -6,8 +6,6 @@ package com.example.android.popularmovies.utils;
 
 public class ConstantsUtils {
     public static final String POSTER_SIZE_185 = "w185";
-    public static final String POSTER_SIZE_342 = "w342";
-    public static final String BACKDROP_SIZE = "w780";
     public static final String API_KEY_PREF = "api_key=";
     public static final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/movie/";
     public static final String MOVIE_DB_IMAGE_URL = "https://image.tmdb.org/t/p/";
@@ -27,4 +25,6 @@ public class ConstantsUtils {
     public static final String INTENT_TRAILER_PARSE_START = "com.example.android.popularmovies.PARSE_TRAILER_START";
     public static final String INTENT_TRAILER_PARSE_END = "com.example.android.popularmovies.PARSE_TRAILER_END";
     public static final String INTENT_FINISH_FETCH_TRAILER = "com.example.android.popularmovies.FINISH_FETCH_TRAILER";
+    public static final String INTENT_ERROR_VIDEO_TASK = "com.example.android.popularmovies.ERROR_VIDEO_TASK";
+    public static final String INTENT_ERROR_REVIEW_TASK = "com.example.android.popularmovies.ERROR_REVIEW_TASK";
 }

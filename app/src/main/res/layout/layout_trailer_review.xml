@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sv_holder"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.android.popularmovies.activities.TrailerAndReviewActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/ll_buttons_holder">
+    android:layout_height="match_parent">
 
         <android.support.v7.widget.CardView
             android:id="@+id/cv_trailers"
@@ -40,8 +31,10 @@
                     android:id="@+id/tv_no_trailers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/half_spacing"
                     android:text="@string/no_trailers"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/half_spacing" />
 
             </LinearLayout>
 
@@ -52,7 +45,7 @@
             style="@style/CardStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/cv_trailers"
             card_view:cardCornerRadius="4dp">
 
             <LinearLayout style="@style/LinearLayoutTrailerReview">
@@ -74,40 +67,14 @@
                     android:id="@+id/tv_no_reviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/half_spacing"
                     android:text="@string/no_reviews"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/half_spacing" />
 
 
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
-    </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/pb_loading"
-        style="@style/ProgressBar" />
-
-    <LinearLayout
-        android:id="@+id/ll_buttons_holder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/bt_show_trailers"
-            style="@style/TrailerReviewButton"
-            android:text="@string/trailers" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent" />
-
-        <Button
-            android:id="@+id/bt_show_reviews"
-            style="@style/TrailerReviewButton"
-            android:text="@string/reviews" />
-
-    </LinearLayout>
 
 </RelativeLayout>

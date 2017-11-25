@@ -31,13 +31,6 @@
             android:launchMode="singleTop"
             tools:targetApi="jelly_bean" />
 
-        <activity
-            android:name=".activities.TrailerAndReviewActivity"
-            android:label="@string/review_activty"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activities.MovieDetailsActivity"
-            tools:targetApi="jelly_bean" />
-
         <provider
             android:name=".data.MovieProvider"
             android:authorities="com.example.android.popularmovies"

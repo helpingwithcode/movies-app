@@ -5,8 +5,8 @@
     <string name="dialog_error_message">We weren\'t able to retrieve data from The Movie Data Base. Please check your internet connection and try again later.</string>
     <string name="dialog_error_title">Error while getting data</string>
     <string name="dialog_try_again">Try again</string>
-    <string name="text_description">Movie description:</string>
-    <string name="vote_avarage">Vote avarage: %1$s</string>
+    <string name="text_description">Movie description</string>
+    <string name="vote_average">Vote average: %1$s</string>
     <string name="release_date">Release date: %1$s</string>
     <string name="menu_title_favorite">Mark as Favorite</string>
     <string name="key_movie">movieId</string>
@@ -24,7 +24,6 @@
     <string name="movie_title_default">Movie title</string>
     <string name="movie_ratings_default">Ratings</string>
     <string name="movie_release_default">Release</string>
-    <string name="button_trailers_reviews">Check out the trailers and reviews here!</string>
     <string name="trailer_text">Trailer #%1$s  (%2$s)</string>
     <string name="key_scroll_position">recyclerViewScrollPosition</string>
     <string name="trailers">Trailers</string>
@@ -32,4 +31,5 @@
     <string name="no_reviews">No reviews found</string>
     <string name="no_trailers">No trailers found</string>
     <string name="toast_message_app_not_installed">youtube app not installed</string>
+    <string name="key_scrollview_position">scrollViewPosition</string>
 </resources>
